@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { RoomButtons } from './TextAndButton/ButtonNumber.tsx';
-import StandartNumber from './Components/Number/FamilyNumber.tsx';
+import FamilyNumber from './Components/Number/FamilyNumber.tsx';
 
 interface LuxProps {
   buttonsPosition?: {
@@ -33,7 +33,7 @@ const BigHouse: React.FC<LuxProps> = ({ buttonsPosition = { x: 10, y: 20 } }) =>
         setSelectedRoom={setSelectedRoom}
         buttonsPosition={buttonsPosition}
       />
-      {selectedRoom === 'standard' && <StandartNumber />}
+      {selectedRoom === 'standard' && <FamilyNumber />}
     </div>
   );
 };

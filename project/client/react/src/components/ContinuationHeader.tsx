@@ -8,8 +8,7 @@ import LoginButtonH from './ContHeader/LoginButton';
 import ReserveButton from './ContHeader/ReserveButton';
 import RegisterButtonH from './ContHeader/RegisterButton';
 import RegisterModal from './ContHeader/RegisterModal'; // Изменили импорт
-
-interface ContinuationHeaderProps {}
+import { BookingDates } from './AppHeader';
 
 const StyledHeader = styled(Layout.Header)`
   padding: 0;
@@ -42,8 +41,12 @@ const AuthContainer = styled.div`
   z-index: 1;
 `;
 
-const ContinuationHeader: React.FC<ContinuationHeaderProps> = () => {
-  const [registerModalVisible, setRegisterModalVisible] = useState(false); // Изменили состояние
+interface ContinuationHeaderProps {
+  dates: BookingDates;
+}
+
+const ContinuationHeader: React.FC<ContinuationHeaderProps> = ({ dates }) => {
+  const [registerModalVisible, setRegisterModalVisible] = useState(false);
   const [loginModalVisible, setLoginModalVisible] = useState(false);
 
   const handleLoginClick = (e: React.MouseEvent) => {
@@ -56,6 +59,17 @@ const ContinuationHeader: React.FC<ContinuationHeaderProps> = () => {
     setRegisterModalVisible(true);
   };
 
+  // Функция для форматирования даты
+  const formatDate = (date: Date | null): string => {
+    if (!date) return 'не выбрана';
+    const options: Intl.DateTimeFormatOptions = { 
+      day: 'numeric', 
+      month: 'short',
+      year: 'numeric'
+    };
+    return new Intl.DateTimeFormat('ru-RU', options).format(date);
+  };
+
   return (
     <>
       <StyledHeader className="continuation-header">
@@ -66,6 +80,16 @@ const ContinuationHeader: React.FC<ContinuationHeaderProps> = () => {
 
           <div className='button-with-phone'>
             <ReserveButton />
+            {/* Добавляем отображение дат рядом с кнопкой бронирования */}
+            {dates.In_date_booking && dates.Out_date_booking && (
+              <div style={{ 
+                marginLeft: '10px',
+                color: '#fff',
+                fontSize: '14px'
+              }}>
+                {formatDate(dates.In_date_booking)} - {formatDate(dates.Out_date_booking)}
+              </div>
+            )}
           </div>
 
           <div className='image'>
@@ -73,7 +97,7 @@ const ContinuationHeader: React.FC<ContinuationHeaderProps> = () => {
           </div>
 
           <div className='reg-button'>
-            <RegisterButtonH onClick={handleRegisterClick} /> {/* Добавили обработчик */}
+            <RegisterButtonH onClick={handleRegisterClick} />
           </div>
 
           <AuthContainer>
@@ -87,13 +111,13 @@ const ContinuationHeader: React.FC<ContinuationHeaderProps> = () => {
       <RegisterModal 
         visible={registerModalVisible}
         onClose={() => setRegisterModalVisible(false)}
-        defaultActiveKey="register" // Указываем, что по умолчанию открыта регистрация
+        defaultActiveKey="register"
       />
       
       <RegisterModal 
         visible={loginModalVisible}
         onClose={() => setLoginModalVisible(false)}
-        defaultActiveKey="login" // Указываем, что по умолчанию открыт вход
+        defaultActiveKey="login"
       />
     </>
   );

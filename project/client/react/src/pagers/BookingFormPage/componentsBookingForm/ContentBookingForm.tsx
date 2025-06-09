@@ -1,8 +1,10 @@
-import { Layout, Form, Input, Button, Select, Row, Col, message } from 'antd';
-import { useState } from 'react';
+import { Layout, Form, Input, Button, Select, Row, Col, message, Typography, Spin } from 'antd';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const { Content } = Layout;
 const { Option } = Select;
+const { Text } = Typography;
 
 const contentStyle: React.CSSProperties = {
     padding: '24px',
@@ -26,29 +28,101 @@ const bookButtonHoverStyle: React.CSSProperties = {
   borderColor: '#E3D9D4',
 };
 
+
+type BookingDetails = {
+    nights: number;
+    In_date_booking: string; 
+    Out_date_booking: string; 
+    checkInTime: string;
+    checkOutTime: string;
+    roomType: string;
+    Price_of_booking: number; 
+    totalPrice: number;
+    bookingNumber?: string; 
+};
+
 const ContentBookingForm: React.FC = () => {
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
+    const [bookingDetails, setBookingDetails] = useState<BookingDetails | null>(null);
+    const [bookingError, setBookingError] = useState<string | null>(null);
+    
+    // Get id_temp_booking from URL
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const id_temp_booking = searchParams.get('id_temp_booking');
+
+    useEffect(() => {
+        const fetchBookingDetails = async () => {
+            try {
+                if (!id_temp_booking) {
+                    throw new Error('ID бронирования не найден в URL');
+                }
+
+                const response = await fetch(`http://26.118.5.15:8787/api/bookings/temp/${id_temp_booking}`);
+                
+                if (!response.ok) {
+                    throw new Error(`Ошибка HTTP: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log(data)
+                
+                if (!data.In_date_booking || !data.Out_date_booking) {
+                    throw new Error('Неполные данные бронирования');
+                }
+
+                const inDate = new Date(data.In_date_booking);
+                const outDate = new Date(data.Out_date_booking);
+                const nights = Math.ceil((outDate.getTime() - inDate.getTime()) / (1000 * 60 * 60 * 24));
+
+                setBookingDetails({
+                    nights,
+                    In_date_booking: data.In_date_booking,
+                    Out_date_booking: data.Out_date_booking,
+                    checkInTime: '14:00', 
+                    checkOutTime: '12:00',
+                    roomType: data.Room_Type || 'двухместный стандарт',
+                    Price_of_booking: data.Price_of_booking || 5000, 
+                    totalPrice: (data.Price_of_booking || 5000) * nights,
+                    bookingNumber: data.booking_id || data.id_temp_booking 
+                });
+
+            } catch (err) {
+                console.error('Ошибка при загрузке данных бронирования:', err);
+                setBookingError(err instanceof Error ? err.message : 'Неизвестная ошибка');
+            }
+        };
+
+        fetchBookingDetails();
+    }, [id_temp_booking]); 
 
     const onFinish = async (values: any) => {
         setLoading(true);
         try {
+            if (!bookingDetails) {
+                throw new Error('Данные бронирования не загружены');
+            }
+
             const bookingData = {
-                guest: {
-                    name_client: values.guest1.lastName + values.guest1.firstName + values.guest1.middleName,
-                    email_client: values.guest1.email,
-                    phone_client: values.guest1.phone
-                },
-                //paymentMethod: values.paymentMethod || 'card' 
+                ID_Booking: 0,
+                Type_room: bookingDetails.roomType,
+                In_date_booking: bookingDetails.In_date_booking,
+                Out_date_booking: bookingDetails.Out_date_booking,
+                Price_of_booking: bookingDetails.Price_of_booking,
+                Name_client: values.guest1.lastName + ' ' + values.guest1.firstName + ' ' + values.guest1.middleName,
+                Email_client: values.guest1.email,
+                Phone_client: values.guest1.phone,
             };
 
-            const response = await fetch('http://localhost:8787/api/bookings', {
+            const response = await fetch('http://26.118.5.15:8787/api/bookings', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(bookingData),
             });
+            console.log(JSON.stringify(bookingData))
 
             if (!response.ok) {
                 throw new Error('Ошибка при бронировании');
@@ -57,7 +131,6 @@ const ContentBookingForm: React.FC = () => {
             const result = await response.json();
             message.success('Бронирование успешно создано!');
             console.log('Ответ сервера:', result);
-            
 
         } catch (error) {
             console.error('Ошибка:', error);
@@ -67,11 +140,17 @@ const ContentBookingForm: React.FC = () => {
         }
     };
 
+    if (bookingError) return <Text type="danger">{bookingError}</Text>;
+    if (!bookingDetails) return <Spin size="large" />;
+
     return (
         <Layout>
             <Content style={contentStyle}>
                 <div style={{ maxWidth: '800px', margin: '0 auto', background: '#fff', padding: '24px', borderRadius: '8px' }}>
                     <h2 style={{ textAlign: 'center', marginBottom: '24px' }}>Введите данные гостей</h2>
+
+                    {/* Booking Summary Section */}
+                    
 
                     <Form form={form} onFinish={onFinish} layout="vertical">
                         {/* Гость 1 */}

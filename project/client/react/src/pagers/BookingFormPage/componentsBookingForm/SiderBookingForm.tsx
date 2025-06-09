@@ -1,8 +1,10 @@
-import Layout from 'antd/es/layout'; // Layout - default import
-import Typography from 'antd/es/typography'; // Typography - default import
-import Divider from 'antd/es/divider'; // Divider - default import
-import Spin from 'antd/es/spin'; // Spin - default import
+import Layout from 'antd/es/layout';
+import Typography from 'antd/es/typography';
+import Divider from 'antd/es/divider';
+import Spin from 'antd/es/spin';
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import dayjs from 'dayjs';
 
 const { Title, Text } = Typography;
 
@@ -27,39 +29,65 @@ const priceStyle: React.CSSProperties = {
 };
 
 type BookingDetails = {
-    nights: number; //кол-во ночей
+    nights: number;
     In_date_booking: string; 
     Out_date_booking: string; 
-    checkInTime: string; //? c 14:00 до 12:00
+    checkInTime: string;
     checkOutTime: string;
-    roomType: string; //берем оттуда, откуда добавляли
+    roomType: string;
     Price_of_booking: number; 
-    totalPrice: number; //окончательная стоимость
+    totalPrice: number;
+    bookingNumber?: string; 
 };
 
 const SiderBookingForm: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [bookingDetails, setBookingDetails] = useState<BookingDetails | null>(null);
     const [error, setError] = useState<string | null>(null);
+    
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const id_temp_booking = searchParams.get('id_temp_booking');
 
     useEffect(() => {
         const fetchBookingDetails = async () => {
             try {
-                const response = await fetch('http://localhost:8787/api/booking-details');
-                if (!response.ok) {
-                    throw new Error('Ошибка при получении данных');
+                if (!id_temp_booking) {
+                    throw new Error('ID бронирования не найден в URL');
                 }
+
+                const response = await fetch(`http://26.118.5.15:8787/api/bookings/temp/${id_temp_booking}`);
+                console.log(response)
+
+                if (!response.ok) {
+                    throw new Error(`Ошибка HTTP: ${response.status}`);
+                }
+
                 const data = await response.json();
+                console.log(data.Room_Type)
+                
+                if (!data.In_date_booking || !data.Out_date_booking) {
+                    throw new Error('Неполные данные бронирования');
+                }
+
+                const inDate = new Date(data.In_date_booking);
+                const outDate = new Date(data.Out_date_booking);
+                const nights = Math.ceil((outDate.getTime() - inDate.getTime()) / (1000 * 60 * 60 * 24));
+
                 setBookingDetails({
-                    In_date_booking: data.checkIn,
-                    Out_date_booking: data.checkOut,
-                    checkInTime: data.checkInTime,
-                    checkOutTime: data.checkOutTime,
-                    room_type: data.roomType,
-                    Price_of_booking: data.roomPrice,
-                    //totalPrice: data.totalPrice
+                    nights,
+                    In_date_booking: dayjs(data.In_date_booking).format('DD.MM.YYYY'),
+                    Out_date_booking: dayjs(data.Out_date_booking).format('DD.MM.YYYY'),
+                    checkInTime: '14:00', 
+                    checkOutTime: '12:00',
+                    roomType: data.Room_Type || 'двухместный стандарт',
+                    Price_of_booking: data.Price_of_booking || 5000, 
+                    totalPrice: (data.Price_of_booking || 5000) * nights,
+                    bookingNumber: data.booking_id || data.id_temp_booking 
                 });
+                
             } catch (err) {
+                console.error('Ошибка при загрузке данных бронирования:', err);
                 setError(err instanceof Error ? err.message : 'Неизвестная ошибка');
             } finally {
                 setLoading(false);
@@ -67,7 +95,7 @@ const SiderBookingForm: React.FC = () => {
         };
 
         fetchBookingDetails();
-    }, []);
+    }, [id_temp_booking]); 
 
     if (loading) return <Spin size="large" />;
     if (error) return <Text type="danger">{error}</Text>;
@@ -77,6 +105,12 @@ const SiderBookingForm: React.FC = () => {
         <Layout style={layoutStyle}>
             <Layout.Content style={contentStyle}>
                 <Title level={2} style={{ textAlign: 'left' }}>Ваше бронирование</Title>
+                
+                {bookingDetails.bookingNumber && (
+                    <Text strong style={{ display: 'block', marginBottom: '16px' }}>
+                        Номер бронирования: {bookingDetails.bookingNumber}
+                    </Text>
+                )}
 
                 <div style={{
                     width: '100%',

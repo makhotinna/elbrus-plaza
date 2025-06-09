@@ -5,6 +5,7 @@ import ComfortNumber from './Content/ComfortNumber/ComfortNumber';
 import Family from './Content/FamilyNumber/Family';
 import BigHouse from './Content/BigHouse/BigHouse';
 import React from 'react';
+import { BookingDates } from './AppHeader';
 
 const contentStyle: React.CSSProperties = {
   backgroundColor: '#fff',
@@ -27,7 +28,11 @@ const sectionStyle: React.CSSProperties = {
   scrollMarginTop: '100px'
 };
 
-const AppContent: React.FC = () => (
+interface AppContentProps {
+  dates: BookingDates;
+}
+
+const AppContent: React.FC<AppContentProps> = ({ dates }) => (
   <Layout.Content style={contentStyle}>
     <div id="two-place" style={sectionStyle}><TwoPlace /></div>
     <div id="lux" style={sectionStyle}><Lux /></div>

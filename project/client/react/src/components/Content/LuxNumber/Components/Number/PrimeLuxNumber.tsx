@@ -1,70 +1,97 @@
 import React from 'react';
 import BaseNumber from './BaseNumber';
 import CarouselPrimeLux from '../CarouselPrimeLux';
-import { Button, message } from 'antd';
-import ConfigProvider from 'antd/es/config-provider';
-import { Link, useNavigate } from 'react-router-dom';
+import { Button, ConfigProvider, message } from 'antd';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useBooking } from '../../../../../contexts/BookingContext';
+
 
 const ImprovedNumber: React.FC = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const { bookingData } = useBooking();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const id_temp_booking = searchParams.get('id_temp_booking');
 
   const handleReserveClick = async (e: React.MouseEvent) => {
-    e.preventDefault(); 
-    
+    e.preventDefault();
+
+    if (!bookingData.In_date_booking || !bookingData.Out_date_booking) {
+      message.error('Сначала выберите даты в календаре');
+      return;
+    }
+
+    if (bookingData.Out_date_booking <= bookingData.In_date_booking) {
+      message.error('Дата выезда должна быть позже даты заезда');
+      return;
+    }
+
     try {
-      const response = await fetch('http://localhost:8787/api/reserve', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      const url = id_temp_booking
+        ? `http://26.118.5.15:8787/api/bookings/temp/${id_temp_booking}`
+        : 'http://26.118.5.15:8787/api/bookings/temp';
+
+      const method = id_temp_booking ? 'PUT' : 'POST';
+
+      const response = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          roomType: 'Двухместный стандарт',
+          In_date_booking: bookingData.In_date_booking.toISOString(),
+          Out_date_booking: bookingData.Out_date_booking.toISOString(),
+          Room_type: 'президентский люкс'
         }),
       });
 
-      if (response.ok) {
-        navigate('/reserve');
-      } else {
-        throw new Error('Ошибка при отправке данных');
-      }
+
+      if (!response.ok) throw new Error(await response.text());
+
+      const data = await response.json();
+      console.log(data);
+      navigate(`/bookingform?id_temp_booking=${data.id_temp_booking}`);
+
     } catch (error) {
-      message.error('Произошла ошибка при бронировании');
-      console.error('Ошибка:', error);
+      message.error('Ошибка бронирования: ' + (error instanceof Error ? error.message : 'Неизвестная ошибка'));
+      console.error('Booking error:', error);
     }
   };
-  return(
-  <BaseNumber
-    CarouselComponent={CarouselPrimeLux}
-    description={
-      <>
-        Этот номер воплощение безупречного вкуса и статуса. Здесь <br />
-        многовековые традиции кавказского гостеприимства гармонично <br />
-        сочетаются с современной роскошью, а величественный Эльбрус <br />
-        за стеклом создает впечатление, будто вся мощь Кавказа — часть <br />
-        ваших апартаментов.
-        <br /><br />
-        <ConfigProvider
-          theme={{
-            components: {
-              Button: {
-                colorPrimary: '#383B52',          // Основной цвет кнопки
-                colorPrimaryHover: '#E3D9D4',     // Цвет фона при наведении
-                colorTextLightSolid: '#ffffff',    // Цвет текста по умолчанию (белый)
-                colorPrimaryTextHover: '#000000',  // Цвет текста при наведении (чёрный)
+
+  return (
+    <BaseNumber
+      CarouselComponent={CarouselPrimeLux}
+      description={
+        <>
+          Этот номер воплощение безупречного вкуса и статуса. Здесь <br />
+          многовековые традиции кавказского гостеприимства гармонично <br />
+          сочетаются с современной роскошью, а величественный Эльбрус <br />
+          за стеклом создает впечатление, будто вся мощь Кавказа — часть <br />
+          ваших апартаментов.
+          <br /><br />
+          <ConfigProvider
+            theme={{
+              components: {
+                Button: {
+                  colorPrimary: '#383B52',          // Основной цвет кнопки
+                  colorPrimaryHover: '#E3D9D4',     // Цвет фона при наведении
+                  colorTextLightSolid: '#ffffff',    // Цвет текста по умолчанию (белый)
+                  colorPrimaryTextHover: '#000000',  // Цвет текста при наведении (чёрный)
+                },
               },
-            },
-          }}
-        >
-          <Link to="/bookingform" onClick={handleReserveClick}>
-            <Button type="primary" size="large">
-              Забронировать
+            }}
+          >
+            <Button
+              type="primary"
+              size="large"
+              onClick={handleReserveClick}
+              disabled={!bookingData.In_date_booking || !bookingData.Out_date_booking}
+            >
+              {id_temp_booking ? 'Обновить бронь' : 'Забронировать'}
             </Button>
-          </Link>
-        </ConfigProvider>
-      </>
-    }
-  />
-);
+          </ConfigProvider>
+        </>
+      }
+    />
+  );
 };
 
 export default ImprovedNumber;

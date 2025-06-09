@@ -6,7 +6,6 @@ import ButtonService from './Header/Button/ButtonService.tsx';
 import ButtonContacts from './Header/Button/ButtonPersonalAccount.tsx'; 
 import TextHeader from './Header/Text.tsx'; 
 import AppLayouts from './Header/Calendar/calendar'; 
-import ButtonSearch from './Header/Button/ButtonSearch.tsx'; 
 
 const headerStyle: React.CSSProperties = { 
     height: 373,
@@ -52,7 +51,6 @@ const AppHeader: React.FC = () => {
                     <AppLayouts />
                 </div>
                 
-                <ButtonSearch />
             </div>
         </Layout.Header>
     );
