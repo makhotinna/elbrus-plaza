@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/go-pkgz/routegroup"
 )
@@ -67,16 +68,38 @@ func (h *EventsHandler) GetEventByID(w http.ResponseWriter, r *http.Request) {
 		log.Print(err)
 		return
 	}
-
 }
 
 func (h *EventsHandler) CreateEvent(w http.ResponseWriter, r *http.Request) {
-	var event models.Events
-	err := json.NewDecoder(r.Body).Decode(&event) 
-	if err != nil {
-		http.Error(w, "Invalid JSON", http.StatusBadRequest)
-		log.Printf("Invalid JSON: %v", err)
-		return
+    var req models.CreateEventsRequest
+    if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+        http.Error(w, "Invalid JSON", http.StatusBadRequest)
+        return
+    }
+
+    startTime, err := time.Parse(time.RFC3339, req.Start_date_events)
+    if err != nil {
+        http.Error(w, "Invalid start_date format", http.StatusBadRequest)
+        return
+    }
+
+    endTime, err := time.Parse(time.RFC3339, req.End_date_events)
+    if err != nil {
+        http.Error(w, "Invalid end_date format", http.StatusBadRequest)
+        return
+    }
+
+	event := models.Events{
+		ID_Events:	req.ID_Events,
+		ID_Hotel:	req.ID_Hotel,
+		Name_events:	req.Name_events,
+		Description_events:	req.Description_events,
+		Start_date_events:	startTime,
+		End_date_events:	endTime,
+		Location_event:	req.Location_event,
+		Price_events:	req.Price_events,
+		Number_of_available_seats:	req.Number_of_available_seats,
+		Status_events: req.Status_events,
 	}
 
 	id, err := h.storage.CreateEvents(r.Context(), &event) 
@@ -100,16 +123,39 @@ func (h *EventsHandler) UpdateEvent(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(r.PathValue("id"))
 	if err != nil {
 		http.Error(w, "Invalid event id", http.StatusBadRequest)
-		log.Print("Invalid ID: %w", err)
+		log.Printf("Invalid ID: %v", err)
 		return
 	}
 
-	var event models.Events
-	err = json.NewDecoder(r.Body).Decode(&event)
-	if err != nil {
-		http.Error(w, "Invalid JSON", http.StatusBadRequest)
-		log.Printf("Invalid JSON: %v", err)
-		return
+    var req models.CreateEventsRequest
+    if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+        http.Error(w, "Invalid JSON", http.StatusBadRequest)
+        return
+    }
+
+    startTime, err := time.Parse(time.RFC3339, req.Start_date_events)
+    if err != nil {
+        http.Error(w, "Invalid start_date format", http.StatusBadRequest)
+        return
+    }
+
+    endTime, err := time.Parse(time.RFC3339, req.End_date_events)
+    if err != nil {
+        http.Error(w, "Invalid end_date format", http.StatusBadRequest)
+        return
+    }
+
+	event := models.Events{
+		ID_Events:	req.ID_Events,
+		ID_Hotel:	req.ID_Hotel,
+		Name_events:	req.Name_events,
+		Description_events:	req.Description_events,
+		Start_date_events:	startTime,
+		End_date_events:	endTime,
+		Location_event:	req.Location_event,
+		Price_events:	req.Price_events,
+		Number_of_available_seats:	req.Number_of_available_seats,
+		Status_events: req.Status_events,
 	}
 	
 	event.ID_Events = id

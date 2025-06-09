@@ -100,7 +100,7 @@ func (h *ClientHandler) UpdateClient(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(r.PathValue("id"))
 	if err != nil {
 		http.Error(w, "Invalid client id", http.StatusBadRequest)
-		log.Print("Invalid ID: %w", err)
+		log.Printf("Invalid ID: %v", err)
 		return
 	}
 
@@ -112,7 +112,7 @@ func (h *ClientHandler) UpdateClient(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	
-	client.ID_Client = id
+	client.ID_Client = int64(id)
 	if err := h.storage.UpdateClient(r.Context(), &client); err != nil {
 		http.Error(w, "Failed to update client", http.StatusInternalServerError)
 		log.Printf("Failed to update client: %v", err)

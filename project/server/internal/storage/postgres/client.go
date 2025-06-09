@@ -18,8 +18,8 @@ func (s *Storage) GetClients(ctx context.Context) ([]models.Client, error) {
 }
 
 
-func (s *Storage) CreateClient(ctx context.Context, client *models.Client) (int64, error) {
-	var id int64
+func (s *Storage) CreateClient(ctx context.Context, client *models.Client) (int, error) {
+	var id int
 
 	//query := `insert into Client (id_hotel, name_client, email_client, phone_client, password_client) values ($1, $2, $3, $4, $5) returning id_client`
 	//err := s.DB.QueryRowContext(ctx, query, client.ID_Hotel, client.Name_client, client.Email_client, client.Phone_client, client.Password_client).Scan(&id)

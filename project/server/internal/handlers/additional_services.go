@@ -90,7 +90,9 @@ func (h *Add_ServHandler) CreateAdd_Serv(w http.ResponseWriter, r *http.Request)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	err = json.NewEncoder(w).Encode(add_serv) 
+	err = json.NewEncoder(w).Encode(map[string]interface{}{
+		"id": id,
+	}) 
 	if err != nil {
 		log.Print(err)
 		return
