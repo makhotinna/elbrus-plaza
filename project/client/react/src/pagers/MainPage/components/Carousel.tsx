@@ -5,10 +5,14 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import { ArrowLeftOutlined, ArrowRightOutlined } from '@ant-design/icons';
 import { Swiper as SwiperType } from 'swiper/types';
-import photo1 from "C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/Frame-9.jpg";
+/*import photo1 from "C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/Frame-9.jpg";
 import photo2 from "C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/Frame 13.jpg";
 import photo3 from "C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/Frame 11.jpg";
-import photo4 from "C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/Frame 10.jpg";
+import photo4 from "C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/Frame 10.jpg";*/
+import photo1 from "../image/Frame-9.jpg";
+import photo2 from "../image/Frame 13.jpg";
+import photo3 from "../image/Frame 11.jpg";
+import photo4 from "../image/Frame 10.jpg";
 
 export default function Carousel() {
     const photos: string[] = [photo1, photo2, photo3, photo4];
@@ -19,13 +23,13 @@ export default function Carousel() {
             maxWidth: '700px',
             margin: '0 auto',
             position: 'relative',
-            bottom: '415px',
+            bottom: '445px',
             height: '100px',
-            marginLeft: '750px'
+            marginLeft: '820px'
         }}>
             <div style={{ 
                 position: 'relative',
-                height: '400px',
+                height: '445px',
                 display: 'flex',
                 alignItems: 'center'
             }}>

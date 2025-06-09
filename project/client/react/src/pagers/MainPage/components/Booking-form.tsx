@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import AppLayouts from './Calendar/calendar';
 import ButtonSearch from "./ButtonSearch";
 
@@ -48,7 +48,8 @@ const BookingForm: React.FC = () => {
       <div className='booking-form'>
         <form onSubmit={handleSubmit}>
           <div className='form-container'>
-            <Link to='/reserve'>
+            <Link to='/reserve'> </Link>
+            <Link to='/numbers'>
               <ButtonSearch/>
             </Link>
           </div>
@@ -69,11 +70,10 @@ const BookingForm: React.FC = () => {
                 required
               >
                 <option value='' selected hidden>Выберите услугу</option>
-                <option value='Забронировать номер'>Забронировать номер</option>
-                <option value='SPA'>SPA</option>
-                <option value='Проведение мероприятий'>Проведение мероприятий</option>
-                <option value='Трансфер'>Трансфер</option>
-                <option value='Экскурсия'>Экскурсия</option>
+                <option value='Забронировать номер'>Активный отдых и приключения</option>
+                <option value='SPA'>Экскурсии по Кабардино-Балкарии</option>
+                <option value='Проведение мероприятий'>Релакс и восстановление</option>
+                <option value='Трансфер'>Для особых случаев</option>
               </select>
             </div>
           </div>

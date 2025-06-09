@@ -1,7 +1,12 @@
 import React from "react";
-import avatar1 from "C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/lera.png"; 
-import avatar2 from "C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/yarik.png";
-import avatar3 from "C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/nikita.png";
+//import avatar1 from "C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/lera.png"; 
+//import avatar2 from "C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/yarik.png";
+//import avatar3 from "C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/nikita.png";
+
+import avatar1 from "../image/lera.png"; 
+import avatar2 from "../image/yarik.png";
+import avatar3 from "../image/nikita.png";
+
 
 interface Review {
   id: number;
@@ -57,7 +62,7 @@ const Reviews: React.FC = () => {
 
   return (
     <section className="reviews-section">
-      <h2 className="section-title">ОТЗЫВЫ</h2>
+      <h2 className="section-title1">ОТЗЫВЫ</h2>
       
       <div className="reviews-container">
         {reviews.map((review, index) => (

@@ -29,7 +29,7 @@ const calendarStyles: CalendarStyles = {
         backdropFilter: 'blur(0px)',
         alignItems: 'flex-start',
         height: '80px',
-        position: 'relative'
+        position: 'relative',
     },
     rangeSeparator: {
         padding: '0 10px',
@@ -46,7 +46,11 @@ const calendarStyles: CalendarStyles = {
         border: 'none',
         height: '90px',
         padding: '5px',
-        overflow: 'visible'
+        overflow: 'visible',
+        position: 'absolute',
+        top: '100px',
+        left: '-50px',
+        width: '400px',
     },
     input: {
         textAlign: 'center',

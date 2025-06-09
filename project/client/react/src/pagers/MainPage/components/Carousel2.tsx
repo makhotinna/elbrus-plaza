@@ -5,18 +5,30 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import { ArrowLeftOutlined, ArrowRightOutlined } from '@ant-design/icons';
 import { Swiper as SwiperType } from 'swiper/types';
-import photo1 from 'C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/room1.png';
+/*import photo1 from 'C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/room1.png';
 import photo2 from 'C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/room2.png';
 import photo3 from 'C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/room3.png';
 import photo4 from 'C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/room4.png';
 import photo5 from 'C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/room5.png';
 import photo6 from 'C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/room6.png';
 import photo7 from 'C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/room7.png';
-import photo8 from 'C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/room8.png';
+import photo8 from 'C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/room8.png';*/
 
 // Дополнительные фото для детального просмотра
-import detailPhoto1 from 'C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/room1.png';
-import detailPhoto2 from 'C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/room2.png';
+//import detailPhoto1 from 'C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/room1.png';
+//import detailPhoto2 from 'C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/room2.png';
+import photo1 from '../image/room1.png';
+import photo2 from '../image/room2.png';
+import photo3 from '../image/room3.png';
+import photo4 from '../image/room4.png';
+import photo5 from '../image/room5.png';
+import photo6 from '../image/room6.png';
+import photo7 from '../image/room7.png';
+import photo8 from '../image/room8.png';
+
+// Дополнительные фото для детального просмотра
+import detailPhoto1 from '../image/room1.png';
+import detailPhoto2 from '../image/room2.png';
 // ... добавьте остальные детальные фото
 
 export default function Carousel() {
@@ -43,19 +55,21 @@ export default function Carousel() {
 
   return (
     <div style={{
-      maxWidth: '1500px',
+      backgroundColor: '#161f23',
+      maxWidth: '1600px',
       margin: '0 auto',
       position: 'relative',
-      padding: '40px 0',
-      bottom: '135px'
+      padding: '1px 0',
+      bottom: '130px',
+      top: '-100px'
     }}>
       <h2 style={{
         textAlign: 'center',
         fontSize: '36px',
         fontWeight: '600',
-        color: '#000',
+        color: 'white',
         marginBottom: '30px',
-        fontFamily: '"Playfair Display", serif',
+        fontFamily: 'Arial, sans-serif',
         textTransform: 'uppercase',
         letterSpacing: '1px'
       }}>
@@ -76,7 +90,7 @@ export default function Carousel() {
           style={{
             position: 'absolute',
             left: '40px',
-            top: '50%',
+            top: '40%',
             transform: 'translateY(-50%)',
             zIndex: 10,
             width: '60px',
@@ -112,19 +126,20 @@ export default function Carousel() {
           loop={true}
           onSwiper={(swiper) => swiperRef.current = swiper}
           style={{
-            width: '100%',
-            height: '100%'
+            
           }}
         >
           {photos.map((photo) => (
             <SwiperSlide key={photo.id}>
               <div style={{
-                width: '100%',
-                height: '100%',
+                width: '1000px',
+                height: '700px',
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                position: 'relative'
+                position: 'relative',
+                top: '-150px',
+                right: '-267px'
               }}>
                 {/* Основное или детальное изображение */}
                 <img
@@ -224,7 +239,7 @@ export default function Carousel() {
           style={{
             position: 'absolute',
             right: '40px',
-            top: '50%',
+            top: '40%',
             transform: 'translateY(-50%)',
             zIndex: 10,
             width: '60px',

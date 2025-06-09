@@ -1,8 +1,13 @@
 import React from "react";
-import info1 from "C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/info1.jpg"
-import info2 from "C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/info2.jpg"
-import info3 from "C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/info3.jpg"
-import info4 from "C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/info4.jpg"
+//import info1 from "C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/info1.jpg"
+//import info2 from "C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/info2.jpg"
+//import info3 from "C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/info3.jpg"
+//import info4 from "C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/info4.jpg"
+
+import info1 from "../image/info1.jpg";
+import info2 from "../image/info2.jpg"; 
+import info3 from "../image/info3.jpg";
+import info4 from "../image/info4.jpg";
 
 const Info2: React.FC = () => {
     return (

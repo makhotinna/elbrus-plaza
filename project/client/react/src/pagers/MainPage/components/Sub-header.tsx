@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import HotelLogo from "C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/Hotel-logo.jpg";
+//import HotelLogo from "C:/Users/lapa_/OneDrive/Рабочий стол/Elbrus-Hotel/my-app/src/pagers/MainPage/image/Hotel-logo.jpg";
+import HotelLogo from "../image/Hotel-logo.jpg";
 import { Popover } from 'antd';
 import RegisterModal from "../../LoyatlyProgramPage/RegisterModelLP";
 import LoginModal from "../../../components/ContHeader/LoginModal";

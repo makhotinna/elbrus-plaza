@@ -6,7 +6,7 @@ import React, { CSSProperties, useState } from 'react';
 const buttonStyle: CSSProperties = {
   position: 'absolute',
   top: '500px',
-  right: '860px',
+  right: '690px',
   height: '120px',
   width: '120px',
   display: 'flex',
